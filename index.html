@@ -14,7 +14,7 @@
   <ul id="wordList"></ul>
 
   <script>
-    const socket = new WebSocket("wss://live-word-game.fly.dev/ws");
+    const socket = new WebSocket("wss://multiscapes.up.railway.app/ws");
 
     socket.onmessage = (event) => {
       const words = JSON.parse(event.data);
