@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Live Word Game</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    ul { list-style: none; padding: 0; }
+  </style>
+</head>
+<body>
+  <h1>Enter a Word</h1>
+  <input id="wordInput" placeholder="Type a word..." />
+  <button onclick="sendWord()">Submit</button>
+  <ul id="wordList"></ul>
+
+  <script>
+    const socket = new WebSocket("wss://live-word-game.fly.dev/ws");
+
+    socket.onmessage = (event) => {
+      const words = JSON.parse(event.data);
+      const list = document.getElementById("wordList");
+      list.innerHTML = "";
+      words.forEach(word => {
+        const li = document.createElement("li");
+        li.textContent = word;
+        list.appendChild(li);
+      });
+    };
+
+    function sendWord() {
+      const input = document.getElementById("wordInput");
+      const word = input.value.trim();
+      if (word && socket.readyState === WebSocket.OPEN) {
+        socket.send(word);
+        input.value = "";
+      }
+    }
+  </script>
+</body>
+</html>
